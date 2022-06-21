@@ -30,7 +30,7 @@ const JWT_SECRET ='#Raunakiscrazy';
     }
       try{
     //check whether the user with this email exist already
-    let user = await User.findOne({email:req.body.email});
+    const user = await User.findOne({email:req.body.email});
     console.log(user);
     if(user){
         return res.status(400).json({error:"Sorry a user with this email already"})
