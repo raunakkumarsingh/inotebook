@@ -23,17 +23,20 @@ const JWT_SECRET ='#Raunakiscrazy';
 
     //if there are errors,return Bad requesrt and the errors
     const errors = validationResult(req);
+    let success=false;
     
 
+    try{
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+        success=false;
+      return res.status(400).json({ success,errors: errors.array() });
     }
-      try{
     //check whether the user with this email exist already
-    const user = await User.findOne({email:req.body.email});
+    let user = await User.findOne({email:req.body.email});
     console.log(user);
     if(user){
-        return res.status(400).json({error:"Sorry a user with this email already"})
+        success=false;
+        return res.status(400).json({success,error:"Sorry a user with this email already"})
     }
     const salt = await bcrypt.genSaltSync(10);
     const  secPass = await bcrypt.hash(req.body.password,salt);
@@ -61,8 +64,9 @@ const JWT_SECRET ='#Raunakiscrazy';
     }
     var authtoken = jwt.sign(data, JWT_SECRET);
     // console.log(jwtData);
-
-    res.json({authtoken});
+     success=true;
+    res.json({success,authtoken});
+    console.log("check");
       }
       //catch error
       catch(error){
@@ -88,13 +92,16 @@ const JWT_SECRET ='#Raunakiscrazy';
     const {email ,password}=req.body;
     try{
       let  user= await User.findOne({email});
+      let success=false;
         if(!user){
-            return res.status(400).json({error: "Please try to login with correct credentials"});
+            success=false;
+            return res.status(400).json({success,error: "Please try to login with correct credentials"});
         }
         //check password or hashed password mached or not
         const passwordCompare= await bcrypt.compare(password, user.password);
         if(!passwordCompare){
-            return res.status(400).json({error: "please try to login with correct credentials"});
+            success=false;
+            return res.status(400).json({success,error: "please try to login with correct credentials"});
         }
         const data={
             user:{
@@ -103,7 +110,8 @@ const JWT_SECRET ='#Raunakiscrazy';
         }
         var authtoken = jwt.sign(data, JWT_SECRET);
         // console.log(jwtData);
-        res.json({authtoken});
+        success=true;
+        res.json({success,authtoken});
              
     }
     catch(error){
