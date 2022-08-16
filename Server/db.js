@@ -1,8 +1,9 @@
 const mongoose =require('mongoose');
 
 // const mongoURI="mongodb://localhost:27017/inotebook?directConnection=true"
-const mongoURI="mongodb+srv://root:toor@cluster0.2nvhulz.mongodb.net/test"
-6
+
+const mongoURI="mongodb+srv://root:toor@cluster0.vh2d3os.mongodb.net/inotebook"
+// const mongoURI="mongodb://localhost:27017/test?directConnection=true"
 
 const connectToMongo =()=>{
     mongoose.connect(mongoURI,()=>{
